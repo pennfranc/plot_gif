@@ -8,10 +8,7 @@ import imageio
 from sklearn.decomposition import PCA
 
 
-
-    
-
-def gif_creation(data, classes, num_classes, name = None):
+def gif_creation(data, classes, name = None, fps=25, steps=180):
 
     # handle case of less than 3 dimensions
     if (data.shape[1] < 3):
@@ -26,6 +23,9 @@ def gif_creation(data, classes, num_classes, name = None):
     # handle case of no classes
     if (classes is None):
         classes = np.zeros(data.shape[0])
+
+    # get number of classes
+    num_classes = len(np.unique(classes))
 
     # create plot
     COLORS = ['red', 'blue', 'yellow', 'green', 'orange', 'pink', 'grey']
@@ -42,18 +42,19 @@ def gif_creation(data, classes, num_classes, name = None):
         data[data.y==class_nr][2], label=('class ' + str(class_nr)), c=color)
     
     plt.title(name)
+    plt.axis('off')
 
     # create gif
     tmp_dir = 'gif_tmp_dir'
     os.mkdir(tmp_dir)
     images = []
-    for i in range(0, 72):
-        ax.view_init(30, i * 5)
+    for i in range(0, steps):
+        ax.view_init(30, i * (360 / steps))
         name = tmp_dir + '/' + str(i) + '.png'
         fig.savefig(name)
         images.append(imageio.imread(name))
 
-    imageio.mimsave('creation.gif', images)
+    imageio.mimsave('creation.gif', images, fps=fps)
     shutil.rmtree(tmp_dir)
 
 

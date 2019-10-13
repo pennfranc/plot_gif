@@ -14,15 +14,17 @@ Usage
 ------
 
 import plot_gif as pg
-pg.gif_creation(data, classes, num_classes, name)
+
+pg.gif_creation(data, classes, name=name, steps=steps, fps=fps)
 
 Parameters
 -----------
 
 data: datapoints to be plotted
-classes: integer values corresponding to cluster/class of each datapoint
-num_classes: total number of distinct classes
+classes: integer values corresponding to cluster/class of each datapoint (can be None)
 name: title of plot (optional)
+fps: frames per second (optional)
+steps: number of images (optional)
 
 Preconditions
 -------------
