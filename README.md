@@ -1,32 +1,30 @@
-Description
------------
+# plot_gif
 
-Takes matrix of datapoints (more than 2 dimesnional in column space) and creates
-a rotating gif showing the 3d plot. If classes are provided, datapoints have the same color
-if they belong to the same class. Datapoints with class -1 are colored black.
+## Example
 
-Dependencies
--------------
-
-pandas, numpy, matplotlib, mpl_toolkits, sklearn, imageio
-
-Usage
-------
-
+```
+from sklearn import datasets
 import plot_gif as pg
 
-pg.gif_creation(data, classes, name=name, steps=steps, fps=fps)
+X1, y1 = datasets.make_blobs(n_samples=1000, centers=4, n_features=4)
+pg.gif_creation(X1, y1, fps=25, steps=180)
+```
+Result:
 
-Parameters
------------
 
-data: datapoints to be plotted
-classes: integer values corresponding to cluster/class of each datapoint (can be None)
-name: title of plot (optional)
-fps: frames per second (optional)
-steps: number of images (optional)
+## Description
 
-Preconditions
--------------
+Takes matrix of datapoints (more than 2 dimensional in column space) and creates
+a rotating gif showing a 3D scatter plot of a PCA projection of the data.
+If classes are provided, datapoints have the same color if they belong to the same class.
+Datapoints with class -1 are colored black.
 
-classes != None => data.shape[0] == len(classes)
+## Dependencies
+
+- pandas
+- numpy
+- matplotlib
+- mpl_toolkits
+- imageio
+- tqdm
+- sklearn
