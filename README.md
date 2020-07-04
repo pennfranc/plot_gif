@@ -1,6 +1,6 @@
 # plot_gif
 
-## Example
+## Examples
 
 ```
 from sklearn import datasets
@@ -11,7 +11,19 @@ pg.gif_creation(X1, y1, fps=25, steps=180)
 ```
 Result:
 <div style="text-align:center;">
-<img src="https://github.com/pennfranc/plot_gif/blob/master/creation.gif" alt="plot gif creation example" />
+<img src="https://github.com/pennfranc/plot_gif/blob/master/gifs/creation.gif" alt="plot gif creation example 1" />
+</div>
+
+By providing a valid value for the `cluster_estimator` argument, we can also let the function compute class labels
+automatically.
+
+```
+X = datasets.load_iris()['data']
+pg.gif_creation(X, cluster_estimator='Birch', n_clusters=3)
+```
+Result:
+<div style="text-align:center;">
+<img src="https://github.com/pennfranc/plot_gif/blob/master/gifs/creation2.gif" alt="plot gif creation example 2" />
 </div>
 
 ## Description

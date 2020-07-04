@@ -12,7 +12,7 @@ from sklearn.decomposition import PCA
 from sklearn.base import ClusterMixin
 from sklearn import cluster
 
-COLORS = ['red', 'blue', 'yellow', 'green', 'orange', 'pink', 'grey']
+COLORS = ['red', 'blue', 'yellow', 'green', 'orange', 'pink', 'grey', 'purple', 'brown']
 
 def gif_creation(
     data: np.ndarray,
@@ -25,7 +25,7 @@ def gif_creation(
     **clustering_kwargs
 ):
     """
-    This function takes a matrix `data` where the rows represent individual data points
+    This function takes a matrix `data` where the rows represent individual numerical data points
     that are at least 3-dimensional and creates a gif of a rotating scatter plot of
     these (dimensionally reduced) data points. Optionally, a vector of classes can be passed
     to color the data points differently.
