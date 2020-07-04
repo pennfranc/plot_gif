@@ -10,12 +10,22 @@ from sklearn.decomposition import PCA
 
 COLORS = ['red', 'blue', 'yellow', 'green', 'orange', 'pink', 'grey']
 
-def gif_creation(data, classes=None, name=None, fps=25, steps=180):
+def gif_creation(
+    data: np.ndarray,
+    classes: np.ndarray = None,
+    name: str = None,
+    fps: int = 25,
+    steps: int = 180,
+    gif_path: str = 'creation.gif'
+):
     """
     This function takes a matrix `data` where the rows represent individual data points
     that are at least 3-dimensional and creates a gif of a rotating scatter plot of
     these (dimensionally reduced) data points. Optionally, a vector of classes can be passed
     to color the data points differently.
+
+    Note that during this process, a temporary directory called `gif_tmp_dir` is created and
+    subsequently deleted.
 
     Parameters
     ----------
@@ -31,7 +41,7 @@ def gif_creation(data, classes=None, name=None, fps=25, steps=180):
         A higher number of steps will result in much smaller rotations between frames.
     """
 
-    # handle case of less than 3 dimensions
+    # check that the dimensionality of the data is high enough
     if (data.shape[1] < 3):
         raise ValueError("Data needs to be at least 3 dimensional")
 
@@ -49,9 +59,15 @@ def gif_creation(data, classes=None, name=None, fps=25, steps=180):
     num_classes = len(np.unique(classes))
 
     # create plot
+    fig, ax = _create_figure(data, classes, num_classes, name)
+
+    # create gif
+    _create_gif(ax, fig, fps, steps, gif_path)
+
+
+def _create_figure(data, classes, num_classes, name):
     data = pd.DataFrame(data)
     data['y'] = classes
-
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     for class_nr in range(-1, num_classes):
@@ -60,28 +76,23 @@ def gif_creation(data, classes=None, name=None, fps=25, steps=180):
         else: color = COLORS[color_nr]
         ax.scatter(data[data.y==class_nr][0], data[data.y==class_nr][1], 
         data[data.y==class_nr][2], label=('class ' + str(class_nr)), c=color)
-    
     plt.title(name)
     plt.axis('off')
+    return fig, ax
 
-    # create gif
+
+def _create_gif(ax, fig, fps, steps, gif_path):
     tmp_dir = 'gif_tmp_dir'
     os.mkdir(tmp_dir)
-    images = []
-    print("Creating individual images...")
-    for i in tqdm(range(0, steps)):
-        ax.view_init(30, i * (360 / steps))
-        name = tmp_dir + '/' + str(i) + '.png'
-        fig.savefig(name)
-        images.append(imageio.imread(name))
-
-    print("Creating gif...")
-    imageio.mimsave('creation.gif', images, fps=fps)
-    shutil.rmtree(tmp_dir)
-
-
-
-
-
-
-
+    try:
+        images = []
+        print("Creating individual images...")
+        for i in tqdm(range(0, steps)):
+            ax.view_init(30, i * (360 / steps))
+            name = tmp_dir + '/' + str(i) + '.png'
+            fig.savefig(name)
+            images.append(imageio.imread(name))
+        print("Creating gif...")
+        imageio.mimsave(gif_path, images, fps=fps)
+    finally:
+        shutil.rmtree(tmp_dir)
